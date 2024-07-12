@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/app/lib/supabaseClient'
 
+/** レシピ作成 */
 export async function POST(req: NextRequest) {
   const { title, making_time, serves, ingredients, cost } = await req.json();
 
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
   );
 }
 
+/** 全レシピ一覧を返す */
 export async function GET() {
   const { data, error } = await supabase.from('recipes').select('*');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

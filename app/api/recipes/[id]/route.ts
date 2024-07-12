@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/app/lib/supabaseClient';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+/** 指定レシピを一つ返す */
+export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   const { data, error } = await supabase.from('recipes').select('*').eq('id', params.id).single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
@@ -24,6 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   );
 }
 
+/** 指定レシピを更新 */
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const { title, making_time, serves, ingredients, cost } = await req.json();
   const { data, error } = await supabase
@@ -53,6 +55,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   );
 }
 
+/** 指定レシピの削除 */
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const { data, error } = await supabase.from('recipes').delete().eq('id', params.id).select();
 
