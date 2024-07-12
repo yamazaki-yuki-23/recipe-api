@@ -3,14 +3,32 @@ import { supabase } from '@/app/lib/supabaseClient'
 
 export async function POST(req: NextRequest) {
   const { title, making_time, serves, ingredients, cost } = await req.json();
-  const { data, error } = await supabase
-    .from('recipes')
-    .insert([{ title, making_time, serves, ingredients, cost }]);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  if (data == null) {
-    return NextResponse.json(null, { status: 404 });
+
+  // 必須フィールドが欠けているかチェック
+  if (!title || !making_time || !serves || !ingredients || !cost) {
+    return NextResponse.json(
+      {
+        message: "Recipe creation failed!",
+        required: "title, making_time, serves, ingredients, cost",
+      },
+      { status: 400 }
+    );
   }
-  return NextResponse.json(data[0], { status: 200 });
+
+ const { data, error } = await supabase
+    .from('recipes')
+    .insert([{ title, making_time, serves, ingredients, cost }])
+    .select();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json(
+    {
+      message: "Recipe successfully created!",
+      recipe: data,
+    },
+    { status: 200 }
+  );
 }
 
 export async function GET() {
