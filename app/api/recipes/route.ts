@@ -34,5 +34,5 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   const { data, error } = await supabase.from('recipes').select('*');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data, { status: 200 });
+  return NextResponse.json({ recipes: data }, { status: 200 });
 }
