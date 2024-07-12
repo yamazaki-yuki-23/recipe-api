@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         message: "Recipe creation failed!",
         required: "title, making_time, serves, ingredients, cost",
       },
-      { status: 400 }
+      { status: 200 }
     );
   }
 
